@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Pradeep Maher · AI & Data Science · Cartoon Dev Lab</title>
+  <!-- Font Awesome 6 + Google Fonts: playful + geeky mix -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0d0b1a;
+      font-family: 'Space Grotesk', sans-serif;
+      color: #eef5ff;
+      overflow-x: hidden;
+    }
+
+    /* floating cartoon code bubbles */
+    .floating-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.2;
+      font-family: 'Comic Neue', cursive;
+      font-weight: 700;
+      font-size: 2rem;
+    }
+    .float-item {
+      position: absolute;
+      background: rgba(0, 30, 50, 0.5);
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      border: 2px dashed #5effcf;
+      backdrop-filter: blur(4px);
+      white-space: nowrap;
+      animation: floatAround 22s infinite alternate ease-in-out;
+    }
+    @keyframes floatAround {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      100% { transform: translate(25px, -20px) rotate(3deg); }
+    }
+    .float-item:nth-child(1) { top: 12%; left: 3%; animation-duration: 16s; }
+    .float-item:nth-child(2) { top: 75%; left: 85%; animation-duration: 21s; }
+    .float-item:nth-child(3) { top: 45%; left: 15%; animation-duration: 19s; }
+    .float-item:nth-child(4) { top: 85%; left: 8%; animation-duration: 24s; }
+    .float-item:nth-child(5) { top: 25%; left: 78%; animation-duration: 18s; }
+    .float-item:nth-child(6) { top: 60%; left: 45%; animation-duration: 20s; }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* reveal animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* hero section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      padding: 4rem 0;
+    }
+    .hero-content {
+      flex: 1 1 400px;
+    }
+    .badge-name {
+      background: #191e42;
+      padding: 0.6rem 1.5rem;
+      border-radius: 80px;
+      width: fit-content;
+      border: 2px solid #5fbcff;
+      box-shadow: 0 0 12px #2c9eff;
+      font-size: 1.2rem;
+      font-weight: 500;
+      backdrop-filter: blur(4px);
+    }
+    .dynamic-title {
+      font-size: clamp(2rem, 8vw, 4rem);
+      font-weight: 800;
+      margin: 1.5rem 0 0.8rem;
+      line-height: 1.2;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #b9f3ff, #cc9eff, #ffb56b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      border-right: 4px solid cyan;
+      animation: blinkCursor 0.9s step-end infinite;
+    }
+    @keyframes blinkCursor {
+      0%,100% { border-color: cyan; }
+      50% { border-color: transparent; }
+    }
+    .hero-desc {
+      background: #0f1b2faa;
+      backdrop-filter: blur(8px);
+      border-radius: 40px;
+      padding: 1.2rem 2rem;
+      border: 2px solid #3d9eff;
+      font-size: 1.2rem;
+      margin-top: 1rem;
+    }
+
+    /* CARTOON AVATAR with hoodie & realistic details */
+    .avatar-lab {
+      flex: 1 1 380px;
+      display: flex;
+      justify-content: center;
+    }
+    .cartoon-card {
+      background: linear-gradient(145deg, #19244f, #101732);
+      border-radius: 70px 70px 50px 50px;
+      padding: 2rem 1.8rem 1.2rem;
+      border: 5px solid #56b0ff;
+      box-shadow: 0 25px 0 #0c2550, 0 35px 30px black;
+      width: 100%;
+      max-width: 420px;
+      transition: transform 0.2s;
+    }
+    .room-lights {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .light {
+      width: 32px;
+      height: 32px;
+      background: #ffea80;
+      border-radius: 50%;
+      box-shadow: 0 0 20px gold;
+    }
+    .avatar-figure {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .face {
+      width: 110px;
+      height: 110px;
+      background: #ffd7a5;
+      border-radius: 50%;
+      border: 5px solid #fff0c0;
+      box-shadow: 0 8px 0 #b97f4b;
+      position: relative;
+      margin-bottom: -10px;
+      z-index: 4;
+    }
+    .eyes {
+      position: absolute;
+      width: 100%;
+      top: 38px;
+      display: flex;
+      justify-content: space-around;
+      padding: 0 20px;
+    }
+    .eye {
+      width: 15px;
+      height: 15px;
+      background: #241f1a;
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px white;
+    }
+    .glasses {
+      position: absolute;
+      top: 32px;
+      width: 90%;
+      left: 5%;
+      height: 28px;
+      border: 4px solid #70dcff;
+      border-radius: 50px;
+      box-shadow: 0 0 12px cyan;
+    }
+    .hoodie {
+      background: #2a6a9e;
+      width: 200px;
+      height: 140px;
+      border-radius: 70px 70px 40px 40px;
+      margin-top: -20px;
+      border: 6px solid #9ad7ff;
+      box-shadow: inset 0 -12px 0 #12436b;
+      position: relative;
+    }
+    .hoodie-cord {
+      width: 22px;
+      height: 38px;
+      background: #c7e6ff;
+      position: relative;
+      top: 32px;
+      left: 85px;
+      border-radius: 20px;
+      transform: rotate(8deg);
+    }
+    .laptop-big {
+      background: #212f52;
+      width: 270px;
+      height: 155px;
+      margin-top: -25px;
+      border-radius: 30px 30px 20px 20px;
+      border: 6px solid #77befc;
+      box-shadow: 0 15px 0 #111f38;
+      padding: 12px;
+    }
+    .screen {
+      background: #041c2c;
+      border-radius: 16px;
+      height: 85px;
+      padding: 8px;
+      border: 2px solid #2b9eff;
+    }
+    .code-line {
+      height: 8px;
+      background: #55e0ff;
+      margin: 6px 0;
+      border-radius: 10px;
+      animation: pulseLine 1.1s infinite alternate;
+    }
+    @keyframes pulseLine {
+      0% { opacity: 0.5; width: 60%; }
+      100% { opacity: 1; width: 95%; background: #b0f0ff; }
+    }
+    .short { width: 65%; }
+    .med { width: 85%; }
+
+    /* section titles */
+    .section-title {
+      font-size: 2.8rem;
+      font-family: 'Comic Neue', cursive;
+      background: #151f41;
+      display: inline-block;
+      padding: 0.4rem 2rem;
+      border-radius: 80px;
+      border: 4px solid #50abff;
+      box-shadow: 0 8px 0 #00275e;
+      margin: 3rem 0 2rem;
+    }
+
+    /* timeline: learning journey mapping (updated 2023-2027) */
+    .journey-timeline {
+      margin: 3rem 0;
+      position: relative;
+    }
+    .timeline-rail {
+      position: relative;
+      margin-left: 40px;
+    }
+    .timeline-rail:before {
+      content: '';
+      position: absolute;
+      left: -25px;
+      top: 10px;
+      bottom: 10px;
+      width: 10px;
+      background: linear-gradient(#2affb6, #b66eff);
+      border-radius: 20px;
+      box-shadow: 0 0 15px cyan;
+    }
+    .timeline-card {
+      background: #101f33dd;
+      backdrop-filter: blur(10px);
+      margin: 1.8rem 0 1.8rem 20px;
+      padding: 1.2rem 2rem;
+      border-radius: 60px;
+      border: 2px solid #5398ff;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: baseline;
+    }
+    .timeline-year {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: #132b4a;
+      padding: 0 1.2rem;
+      border-radius: 50px;
+      border: 2px solid cyan;
+    }
+    .timeline-desc {
+      font-size: 1.2rem;
+    }
+
+    /* skills bubble cloud */
+    .skill-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      justify-content: center;
+      background: #0b1d32b3;
+      backdrop-filter: blur(12px);
+      padding: 2rem;
+      border-radius: 100px;
+      border: 3px solid #48b5ff;
+    }
+    .skill-pill {
+      background: #223e6b;
+      padding: 0.7rem 2rem;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1.2rem;
+      border: 3px solid #3ec9ff;
+      box-shadow: 0 6px 0 #002259;
+      transition: 0.1s linear;
+    }
+    .skill-pill i {
+      margin-right: 8px;
+      color: #fff3a3;
+    }
+
+    /* flip cards projects grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 2rem;
+      margin: 2.5rem 0;
+    }
+    .flip-card {
+      background-color: transparent;
+      height: 320px;
+      perspective: 1800px;
+    }
+    .flip-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.7s;
+      transform-style: preserve-3d;
+      border-radius: 42px;
+    }
+    .flip-card:hover .flip-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-front, .flip-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 42px;
+      padding: 2rem 1.5rem;
+      border: 4px solid #54acff;
+    }
+    .flip-front {
+      background: #13223f radial-gradient(circle at 20% 30%, #235a8a 2px, transparent 2px);
+      background-size: 28px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .flip-front i {
+      font-size: 4rem;
+      color: #98e1ff;
+      filter: drop-shadow(0 0 8px #3eb5fc);
+    }
+    .flip-back {
+      background: linear-gradient(145deg, #0d2742, #191f52);
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .tech-badge {
+      background: #00a6cf;
+      display: inline-block;
+      padding: 0.3rem 1rem;
+      border-radius: 60px;
+      margin: 0.3rem 0.2rem;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #010c1f;
+    }
+
+    /* contact + footer */
+    .contact-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.8rem;
+      background: #04152bd9;
+      border-radius: 100px;
+      padding: 1.8rem;
+      border: 2px solid #89cfff;
+    }
+    .contact-item {
+      background: #1f2a55;
+      padding: 0.8rem 1.8rem;
+      border-radius: 60px;
+      border: 2px solid #66baff;
+      transition: 0.2s;
+      font-size: 1.1rem;
+    }
+    .contact-item i {
+      margin-right: 12px;
+    }
+    footer {
+      text-align: center;
+      margin: 4rem 0 2rem;
+      color: #809bc2;
+    }
+
+    @media (max-width: 780px) {
+      .container { padding: 0 1rem; }
+      .section-title { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-bg">
+    <div class="float-item"><i class="fas fa-microchip"></i> mapReduce() → insights</div>
+    <div class="float-item"><i class="fas fa-database"></i> HDFS: storing dreams</div>
+    <div class="float-item"><i class="fas fa-chart-simple"></i> DSA · problem solver</div>
+    <div class="float-item"><i class="fas fa-brain"></i> AI explorer · Python</div>
+    <div class="float-item"><i class="fas fa-laptop-code"></i> WHERE creativity meets data</div>
+    <div class="float-item">🐍 resilient path · networkX</div>
+  </div>
+
+  <div class="container">
+    <!-- HERO Pradeep Maher -->
+    <section class="hero" id="hero">
+      <div class="hero-content reveal">
+        <div class="badge-name">
+          <i class="fas fa-user-astronaut"></i>  Pradeep Maher · AI & Data Science
+        </div>
+        <div class="dynamic-title">
+          <span id="typingText" class="gradient-text"></span>
+        </div>
+        <div class="hero-desc">
+          <i class="fas fa-map-marker-alt"></i> Manera, Uttarkashi, Uttarakhand, India<br>
+          <i class="fas fa-graduation-cap"></i> B.Tech – AI & Data Science (2023–2027) | Student · Developer · Problem Solver
+          <hr style="background:#3f8eff; margin: 15px 0;">
+          I love building scalable systems with Java, Hadoop, and ML. Turning data into decisions, one algorithm at a time 🚀
+        </div>
+      </div>
+      <!-- cartoon avatar + hoodie + futuristic laptop -->
+      <div class="avatar-lab reveal">
+        <div class="cartoon-card">
+          <div class="room-lights">
+            <div class="light"></div><div class="light"></div><div class="light"></div>
+          </div>
+          <div class="avatar-figure">
+            <div class="face">
+              <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+              <div class="glasses"></div>
+            </div>
+            <div class="hoodie">
+              <div class="hoodie-cord"></div>
+            </div>
+            <div class="laptop-big">
+              <div class="screen">
+                <div class="code-line short"></div>
+                <div class="code-line med"></div>
+                <div class="code-line"></div>
+              </div>
+              <div style="color:#b3dbff; font-size:0.75rem; text-align:center; margin-top:5px;"><i class="fas fa-cloud-arrow-up"></i> hadoop@cluster</div>
+            </div>
+          </div>
+          <div style="text-align:center; margin-top: 12px; font-weight:bold;">pradeep.dev <i class="fas fa-crown" style="color: #ffd966;"></i></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Career Objective + Summary Compact -->
+    <section class="reveal" style="background: #0c152db3; border-radius: 48px; padding: 2rem; margin: 1rem 0; backdrop-filter: blur(6px); border: 2px solid #3e93ff;">
+      <h3 style="font-size: 2rem; font-family: 'Comic Neue'"><i class="fas fa-bullseye"></i> Career Objective</h3>
+      <p style="font-size: 1.2rem; margin-top: 0.8rem;">To build a strong career in software development and data-driven technologies by applying my knowledge of programming, big data, and problem-solving skills, while continuously learning and contributing to impactful projects.</p>
+      <hr style="margin: 1rem 0; background:#238eff;">
+      <p><i class="fas fa-quote-left"></i> Hands-on experience in Java, Hadoop, DSA, and real-world systems. I blend creativity with logic to craft efficient solutions. Currently in my 2nd/3rd year of B.Tech (2023-2027), I'm passionate about AI engineering and big data analytics.</p>
+    </section>
+
+    <!-- Explorer's timeline: learning journey (updated 2023-2027) -->
+    <section>
+      <h2 class="section-title reveal"><i class="fas fa-road"></i> explorer's journey</h2>
+      <div class="journey-timeline timeline-rail">
+        <div class="timeline-card reveal">
+          <span class="timeline-year">2023</span>
+          <span class="timeline-desc"><strong>Started B.Tech AI&DS (2023–2027)</strong> – dove into Python, C++, DSA foundations & programming logic 🔥</span>
+        </div>
+        <div class="timeline-card reveal">
+          <span class="timeline-year">2024</span>
+          <span class="timeline-desc">Built first big data project: Web Log Analysis with Hadoop MapReduce, mastered MySQL, MongoDB, and OOP with Java</span>
+        </div>
+        <div class="timeline-card reveal">
+          <span class="timeline-year">2025</span>
+          <span class="timeline-desc">Developed major projects: Hospital Management System (Java Swing) + Resilient Path Simulator (Python/NetworkX). Advanced DSA & problem solving ✨</span>
+        </div>
+        <div class="timeline-card reveal">
+          <span class="timeline-year">2026</span>
+          <span class="timeline-desc">Deepening AI/ML expertise, exploring TensorFlow, Spark, and preparing for impactful internships & research</span>
+        </div>
+        <div class="timeline-card reveal">
+          <span class="timeline-year">2027</span>
+          <span class="timeline-desc">Goal: Graduate as a skilled AI & Data Science engineer ready to innovate in big data & intelligent systems 🎓</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Skills Section -->
+    <section>
+      <h2 class="section-title reveal"><i class="fas fa-cogs"></i> technical toolkit</h2>
+      <div class="skill-cloud reveal">
+        <span class="skill-pill"><i class="fab fa-java"></i> Java</span>
+        <span class="skill-pill"><i class="fab fa-python"></i> Python</span>
+        <span class="skill-pill"><i class="fas fa-database"></i> MySQL</span>
+        <span class="skill-pill"><i class="fas fa-chart-line"></i> Hadoop (HDFS/MapReduce)</span>
+        <span class="skill-pill"><i class="fas fa-project-diagram"></i> DSA & OOP</span>
+        <span class="skill-pill"><i class="fas fa-leaf"></i> MongoDB</span>
+        <span class="skill-pill"><i class="fas fa-code"></i> Java Swing</span>
+        <span class="skill-pill"><i class="fab fa-html5"></i> HTML/CSS</span>
+        <span class="skill-pill"><i class="fas fa-brain"></i> TensorFlow/PyTorch (learning)</span>
+        <span class="skill-pill"><i class="fas fa-tools"></i> VS Code · Eclipse · Cloudera</span>
+      </div>
+    </section>
+
+    <!-- Projects : Flip Cards (Hadoop, hospital, resilient path + extra) -->
+    <section>
+      <h2 class="section-title reveal"><i class="fas fa-flask"></i> featured projects</h2>
+      <div class="projects-grid">
+        <!-- Hadoop Web Log Analysis -->
+        <div class="flip-card reveal">
+          <div class="flip-inner">
+            <div class="flip-front"><i class="fas fa-chart-simple"></i><h3>Hadoop Web Log Analysis</h3><p>MapReduce · HDFS</p></div>
+            <div class="flip-back"><p>Processed 20GB+ logs to extract user behavior & traffic patterns. Implemented custom MapReduce jobs for anomaly detection. (2024)</p><span class="tech-badge">Hadoop</span><span class="tech-badge">Java</span></div>
+          </div>
+        </div>
+        <!-- Hospital Management System (Java Swing + MySQL) -->
+        <div class="flip-card reveal">
+          <div class="flip-inner">
+            <div class="flip-front"><i class="fas fa-hospital-user"></i><h3>Hospital Mgmt System</h3><p>Java Swing · MySQL</p></div>
+            <div class="flip-back"><p>Desktop app managing patients, doctors, staff records & appointments. Role based login & billing module. (2025)</p><span class="tech-badge">Java</span><span class="tech-badge">MySQL</span><span class="tech-badge">Swing</span></div>
+          </div>
+        </div>
+        <!-- Resilient Path Simulator -->
+        <div class="flip-card reveal">
+          <div class="flip-inner">
+            <div class="flip-front"><i class="fas fa-network-wired"></i><h3>Resilient Path Simulator</h3><p>Python · NetworkX</p></div>
+            <div class="flip-back"><p>Graph-based simulation for optimal routing in failure-prone networks. Dijkstra & custom resilience metrics. (2025)</p><span class="tech-badge">Python</span><span class="tech-badge">NetworkX</span></div>
+          </div>
+        </div>
+        <!-- AI Symptom Checker / Mini LLM exploration  -->
+        <div class="flip-card reveal">
+          <div class="flip-inner">
+            <div class="flip-front"><i class="fas fa-robot"></i><h3>AI Symptom assistant</h3><p>NLP demo</p></div>
+            <div class="flip-back"><p>Prototype symptom checker using basic ML & rule-based classification, showing AI potential in healthcare. (2025 ongoing)</p><span class="tech-badge">Python</span><span class="tech-badge">scikit-learn</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certifications + resume download (achievements) -->
+    <section>
+      <h2 class="section-title reveal"><i class="fas fa-medal"></i> achievements & certs</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: 2rem;">
+        <span class="skill-pill"><i class="fas fa-certificate"></i> Hadoop Cloudera Essentials</span>
+        <span class="skill-pill"><i class="fas fa-certificate"></i> Python for Data Science (NPTEL)</span>
+        <span class="skill-pill"><i class="fas fa-certificate"></i> AWS ML Foundations</span>
+        <span class="skill-pill"><i class="fas fa-trophy"></i> Hackathon Finalist '25</span>
+        <span class="skill-pill"><i class="fas fa-code"></i> Java DSA certification</span>
+      </div>
+      <div style="text-align: center; margin: 2rem 0;">
+        <a href="#" class="skill-pill" style="background:#332b6e; font-size: 1.4rem; text-decoration: none; padding: 0.8rem 2rem; display: inline-block;"><i class="fas fa-download"></i> 📄 Resume (PDF)</a>
+      </div>
+    </section>
+
+    <!-- Connect / contact section -->
+    <section>
+      <h2 class="section-title reveal"><i class="fas fa-paper-plane"></i> say hello</h2>
+      <div class="contact-buttons reveal">
+        <span class="contact-item"><i class="fas fa-envelope"></i> pradeep.maher@ds.ai</span>
+        <span class="contact-item"><i class="fab fa-github"></i> /PradeepMaher</span>
+        <span class="contact-item"><i class="fab fa-linkedin"></i> /in/pradeep-maher</span>
+        <span class="contact-item"><i class="fas fa-map-pin"></i> Uttarakhand, India</span>
+      </div>
+      <div style="text-align:center; margin-top: 1.5rem;">
+        <span class="contact-item" style="background:#121f3f;"><i class="fas fa-code-branch"></i> GitHub: https://github.com/PradeepMaher</span>
+      </div>
+    </section>
+
+    <footer>
+      <p>🚀 Pradeep Maher · B.Tech AI & Data Science (2023–2027) · code, coffee & curiosity driven 🧠</p>
+    </footer>
+  </div>
+
+  <script>
+    // multi-line typing effect for hero
+    const typingSpan = document.getElementById('typingText');
+    const phrasesArr = [
+      "Pradeep Maher — AI Explorer 🧠",
+      "Big Data Enthusiast 📊",
+      "Java · Hadoop · Problem Solver",
+      "B.Tech AI&DS (2023-2027) 🤖"
+    ];
+    let idx = 0, charIdx = 0;
+    let isDeletingFlag = false;
+
+    function typeEffect() {
+      let current = phrasesArr[idx];
+      if (!isDeletingFlag && charIdx <= current.length) {
+        typingSpan.textContent = current.substring(0, charIdx);
+        charIdx++;
+        setTimeout(typeEffect, 110);
+      } 
+      else if (isDeletingFlag && charIdx >= 0) {
+        typingSpan.textContent = current.substring(0, charIdx);
+        charIdx--;
+        setTimeout(typeEffect, 55);
+      } 
+      else {
+        if (!isDeletingFlag && charIdx > current.length) {
+          isDeletingFlag = true;
+          setTimeout(typeEffect, 1200);
+        } 
+        else if (isDeletingFlag && charIdx < 0) {
+          isDeletingFlag = false;
+          idx = (idx + 1) % phrasesArr.length;
+          charIdx = 0;
+          setTimeout(typeEffect, 180);
+        }
+      }
+    }
+    typeEffect();
+
+    // scroll reveal effect
+    const reveals = document.querySelectorAll('.reveal');
+    function checkReveal() {
+      reveals.forEach(el => {
+        const windowHeight = window.innerHeight;
+        const rectTop = el.getBoundingClientRect().top;
+        const triggerPoint = 140;
+        if (rectTop < windowHeight - triggerPoint) {
+          el.classList.add('active');
+        } else {
+          el.classList.remove('active');
+        }
+      });
+    }
+    window.addEventListener('scroll', checkReveal);
+    checkReveal();
+
+    // small hero parallax tilt
+    window.addEventListener('scroll', () => {
+      const heroSection = document.querySelector('.hero');
+      if (heroSection) {
+        let offset = window.scrollY * 0.2;
+        heroSection.style.transform = `translateY(${offset * 0.2}px)`;
+      }
+    });
+  </script>
+</body>
+</html>
